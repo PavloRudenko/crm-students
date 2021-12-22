@@ -1,5 +1,4 @@
 # crm-students
-=============================
 
 Educational project realized by me in progress course work.
 Only Frontend was realized by me (folder frontend-pro), backend was coding by Skillbox company.
