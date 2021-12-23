@@ -79,7 +79,7 @@ class Table extends Element {
     const { id, name, surname, lastName, contacts, updatedAt, createdAt } = client
     const $contacts = this.createContacts(contacts)
     const $buttons = this.createButtons(id)
-    this.studentsCellList[id] = [id, `${surname} ${name} ${lastName}`, this.formatDate(createdAt), this.formatDate(updatedAt), $contacts, $buttons]
+    this.studentsCellList[id] = [id, `${surname} ${name} ${lastName}`, createdAt, updatedAt, $contacts, $buttons]
 
     const cells = this.studentsCellList[id].map(studentProp => this.createCell(studentProp))
     this.studentsRowList[id].innerHTML = ''
@@ -92,7 +92,7 @@ class Table extends Element {
       const { id, name, surname, lastName, contacts, updatedAt, createdAt } = client
       const $contacts = this.createContacts(contacts)
       const $buttons = this.createButtons(id)
-      const student = [id, `${surname} ${name} ${lastName}`, this.formatDate(createdAt), this.formatDate(updatedAt), $contacts, $buttons]
+      const student = [id, `${surname} ${name} ${lastName}`, createdAt, updatedAt, $contacts, $buttons]
 
       const cells = student.map(studentProp => this.createCell(studentProp))
       const row = this.createElement('tr', { class: 'trow', 'data-id': `${client.id}` }, ...cells)
@@ -147,14 +147,6 @@ class Table extends Element {
 
   createTBody({ attributes = {} }) {
     return this.createElement('tbody', attributes)
-  }
-
-  formatDate(date) {
-    return new Date(date).
-      toLocaleString().
-      split(',').
-      join(' ').
-      slice(0, -3)
   }
 }
 

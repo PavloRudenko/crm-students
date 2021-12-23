@@ -14,10 +14,10 @@ class App {
     })
 
     this.listeners = new Listeners()
-    this.loader = new Loader({ parent: { class: 'loader-wrapper' }, child: { class: 'loader' } })
+    this.loader = new Loader({parent: { class: 'loader-wrapper' }, child: { class: 'loader' }})
   }
 
-  render() {
+  async render() {
     this.container.append(
       this.mainTitle,
       this.listeners.table.toWrapp({ class: 'wrapper' }),
@@ -40,14 +40,12 @@ class App {
   }
 
   setup() {
-    document.addEventListener('click', this.listeners.listenerClick.bind(this.listeners))
-    document.addEventListener('input', this.listeners.listenerClick.bind(this.listeners))
+    document.addEventListener('click', this.listeners.eventListener.bind(this.listeners))
     window.addEventListener('hashchange', this.listeners.changeForm.bind(this.listeners))
   }
 
   destroy() {
-    document.removeEventListener('click', this.listeners.listenerClick)
-    document.removeEventListener('input', this.listeners.listenerClick)
+    document.removeEventListener('click', this.listeners.eventListener)
     this.container.remove()
   }
 }

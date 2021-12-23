@@ -56,27 +56,28 @@ class Listeners {
     target.firstChild.classList.toggle('contact-icon__popup_d_none')
   }
 
-  async searchStudent() {
+  async searchStudent(isOpenDropdown = false) {
     this.table.deleteAllStudents()
-    const { value } = this.header.searchInput
+    const { searchInput } = this.header
+    const { value } = searchInput.input
+
 
     this.table.element.parentElement.after(this.loader.element)
 
     this.model.getClientsList().then(data => {
+      isOpenDropdown ? '' : searchInput.element.classList.add('open')
+      searchInput.destroyAutoItem()
+      searchInput.findAuto(data, value).forEach(item => searchInput.createAutoItem(item, value))
+
       this.loader.destroy()
 
       if (!value) {
+        searchInput.element.classList.remove('open')
+        searchInput.destroyAutoItem()
         return this.table.studentsRender(data)
       }
 
-      const studentList = data.filter(client => {
-        return Object.values(client).find(prop => {
-          if (typeof prop === 'string') {
-            return prop.toLowerCase().includes(value.toLowerCase())
-          }
-        })
-      })
-      this.table.studentsRender(studentList)
+      this.table.studentsRender(searchInput.findAuto(data, value))
     })
   }
 
@@ -196,7 +197,7 @@ class Listeners {
       return form.newError(errors)
     }
 
-    table.changeStudent(await response.json())
+    table.changeStudent(model.formatDate(await response.json()))
     this.closeModalWindow()
   }
 
@@ -220,11 +221,11 @@ class Listeners {
       return form.newError(errors)
     }
 
-    table.addStudent([await response.json()])
+    table.addStudent([model.formatDate(await response.json())])
     this.closeModalWindow()
   }
 
-  listenerClick(event) {
+  eventListener(event) {
     const { doing } = event.target.dataset
     if (doing) {
       this[doing](event)
